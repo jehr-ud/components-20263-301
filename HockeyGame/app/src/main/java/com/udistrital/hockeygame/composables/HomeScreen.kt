@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.udistrital.hockeygame.R
 
 @Composable
-fun Home(){
+fun HomeScreen(){
 
     Column() {
         Text(stringResource(R.string.home_title))
