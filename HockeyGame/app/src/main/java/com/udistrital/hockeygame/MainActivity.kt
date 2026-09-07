@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.udistrital.hockeygame.composables.GameScreen
-import com.udistrital.hockeygame.composables.Home
 import com.udistrital.hockeygame.composables.HomeScreen
 import com.udistrital.hockeygame.enums.TypeScreen
 import com.udistrital.hockeygame.ui.theme.HockeyGameTheme
