@@ -31,7 +31,9 @@ class MainActivity : ComponentActivity() {
                     var currentScreen by remember { mutableStateOf(TypeScreen.HOME) }
 
                     if (currentScreen == TypeScreen.HOME) {
-                        HomeScreen()
+                        HomeScreen() {
+                            currentScreen = TypeScreen.GAME
+                        }
                     } else if (currentScreen == TypeScreen.GAME) {
                         GameScreen()
                     }
