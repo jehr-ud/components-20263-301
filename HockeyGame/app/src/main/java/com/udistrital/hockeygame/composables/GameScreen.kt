@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.sp
@@ -30,7 +31,7 @@ fun GameScreen(
 ) {
 
     val context = LocalContext.current
-
+//
     var gyroX by remember { mutableFloatStateOf(0f) }
     var gyroY by remember { mutableFloatStateOf(0f) }
     var gyroZ by remember { mutableFloatStateOf(0f) }
@@ -103,11 +104,65 @@ fun GameScreen(
         Canvas(
             modifier = Modifier.fillMaxSize()
         ) {
+            drawRect(
+                color = Color(255, 255, 255, 255),
+                topLeft = Offset(
+                    (size.width - size.width*0.80f) / 2f,
+                    (size.height - size.height*0.90f) / 2f
+                ),
+                size = Size(size.width*0.80f, size.height*0.90f)
+            )
 
             drawRect(
-                color = Color(0xFF3498DB),
+                color = Color(255, 86, 86, 255),
+                topLeft = Offset(
+                    (size.width - size.width*0.80f) / 2f,
+                    (size.height - size.height*0.91f) / 2f
+                ),
+                size = Size(size.width*0.80f, size.height*0.91f),
+                style = Stroke(width = 4.dp.toPx())
+            )
+
+            drawCircle(
+                color = Color(255, 86, 86, 255),
+                radius = 100.dp.toPx(),
+                center = Offset(size.width / 2f, size.height- 40.dp.toPx()),
+                style = Stroke(width = 4.dp.toPx())
+            )
+
+            drawCircle(
+                color = Color(255, 86, 86, 255),
+                radius = 100.dp.toPx(),
+                center = Offset(size.width / 2f, 40.dp.toPx()),
+                style = Stroke(width = 4.dp.toPx())
+            )
+
+            drawLine(
+                color = Color(255, 86, 86, 255),
+                start = Offset(40.dp.toPx(), size.height / 2f),
+                end = Offset((size.width-40.dp.toPx()), size.height / 2f),
+                strokeWidth = 4.dp.toPx()
+            )
+
+            drawLine(
+                color = Color(255, 86, 86, 255),
+                start = Offset(40.dp.toPx(), size.height / 4f),
+                end = Offset((size.width-40.dp.toPx()), size.height / 4f),
+                strokeWidth = 4.dp.toPx()
+            )
+
+            drawLine(
+                color = Color(255, 86, 86, 255),
+                start = Offset(40.dp.toPx(), (size.height / 4f)*3),
+                end = Offset((size.width-40.dp.toPx()), (size.height / 4f)*3),
+                strokeWidth = 4.dp.toPx()
+            )
+
+            drawRect(
+                color = Color(0, 140, 159, 255),
                 topLeft = Offset.Zero,
-                size = size
+                size = Size(size.width, size.height),
+                style = Stroke(width = 80.dp.toPx())
             )
 
             val centroX = size.width / 2f
@@ -120,45 +175,86 @@ fun GameScreen(
             )
 
             drawCircle(
-                color = Color(0xFFE74C3C),
-                radius = 80f,
-                center = Offset(
-                    playerXLimitado,
-                    playerY
-                )
+                color = Color.Black,
+                radius = 30.dp.toPx(),
+                center = Offset(size.width / 2f, size.height / 2f),
             )
 
             drawCircle(
-                color = Color(0xFFC0392B),
-                radius = 80f,
+                color = Color(red = 43, green = 138, blue = 255, alpha = 255),
+                radius = 40.dp.toPx(),
                 center = Offset(
                     playerXLimitado,
-                    playerY
-                ),
-                style = Stroke(width = 8f)
-            )
+                    playerY),
+                style = Stroke(width = 26.dp.toPx())
 
+            )
 
             val enemyY = 180f
 
             drawCircle(
-                color = Color(0xFF2ECC71),
-                radius = 80f,
-                center = Offset(
-                    centroX,
-                    enemyY
-                )
-            )
-
-            drawCircle(
-                color = Color(0xFF27AE60),
-                radius = 80f,
+                color = Color(61,255,43),
+                radius = 40.dp.toPx(),
                 center = Offset(
                     centroX,
                     enemyY
                 ),
-                style = Stroke(width = 8f)
+                style = Stroke(width = 26.dp.toPx())
+
             )
+
+
+
+            //Viejo
+//            val centroX = size.width / 2f
+//
+//            val playerY = size.height - 180f
+//
+//            val playerXLimitado = playerX.coerceIn(
+//                100f,
+//                size.width - 100f
+//            )
+
+//            drawCircle(
+//                color = Color(0xFFE74C3C),
+//                radius = 80f,
+//                center = Offset(
+//                    playerXLimitado,
+//                    playerY
+//                )
+//            )
+//
+//            drawCircle(
+//                color = Color(0xFFC0392B),
+//                radius = 80f,
+//                center = Offset(
+//                    playerXLimitado,
+//                    playerY
+//                ),
+//                style = Stroke(width = 8f)
+//            )
+//
+//
+////            val enemyY = 180f
+//
+//            drawCircle(
+//                color = Color(0xFF2ECC71),
+//                radius = 80f,
+//                center = Offset(
+//                    centroX,
+//                    enemyY
+//                )
+//            )
+//
+//            drawCircle(
+//                color = Color(0xFF27AE60),
+//                radius = 80f,
+//                center = Offset(
+//                    centroX,
+//                    enemyY
+//                ),
+//                style = Stroke(width = 8f)
+//            )
         }
 
 
