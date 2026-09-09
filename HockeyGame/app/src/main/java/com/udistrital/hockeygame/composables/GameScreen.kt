@@ -206,10 +206,7 @@ fun GameScreen(
 
                 if (distanciaEnemigo <= ballRadius + playerRadius && ballVelocityY < 0f) {
 
-                    ballY =
-                        enemyY +
-                                playerRadius +
-                                ballRadius
+                    ballY = enemyY + playerRadius + ballRadius
 
                     ballVelocityY = -ballVelocityY
 
