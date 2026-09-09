@@ -34,7 +34,9 @@ class MainActivity : ComponentActivity() {
                             currentScreen = TypeScreen.GAME
                         }
                     } else if (currentScreen == TypeScreen.GAME) {
-                        GameScreen()
+                        GameScreen(onBack = {
+                            currentScreen = TypeScreen.HOME
+                        })
                     }
                 }
             }
