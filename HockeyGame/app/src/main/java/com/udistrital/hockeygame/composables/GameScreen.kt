@@ -31,7 +31,7 @@ fun GameScreen(
 ) {
 
     val context = LocalContext.current
-//
+
     var gyroX by remember { mutableFloatStateOf(0f) }
     var gyroY by remember { mutableFloatStateOf(0f) }
     var gyroZ by remember { mutableFloatStateOf(0f) }
@@ -202,59 +202,6 @@ fun GameScreen(
                 style = Stroke(width = 26.dp.toPx())
 
             )
-
-
-
-            //Viejo
-//            val centroX = size.width / 2f
-//
-//            val playerY = size.height - 180f
-//
-//            val playerXLimitado = playerX.coerceIn(
-//                100f,
-//                size.width - 100f
-//            )
-
-//            drawCircle(
-//                color = Color(0xFFE74C3C),
-//                radius = 80f,
-//                center = Offset(
-//                    playerXLimitado,
-//                    playerY
-//                )
-//            )
-//
-//            drawCircle(
-//                color = Color(0xFFC0392B),
-//                radius = 80f,
-//                center = Offset(
-//                    playerXLimitado,
-//                    playerY
-//                ),
-//                style = Stroke(width = 8f)
-//            )
-//
-//
-////            val enemyY = 180f
-//
-//            drawCircle(
-//                color = Color(0xFF2ECC71),
-//                radius = 80f,
-//                center = Offset(
-//                    centroX,
-//                    enemyY
-//                )
-//            )
-//
-//            drawCircle(
-//                color = Color(0xFF27AE60),
-//                radius = 80f,
-//                center = Offset(
-//                    centroX,
-//                    enemyY
-//                ),
-//                style = Stroke(width = 8f)
-//            )
         }
 
 
