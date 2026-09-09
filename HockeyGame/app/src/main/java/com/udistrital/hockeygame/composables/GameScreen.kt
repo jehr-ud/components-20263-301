@@ -133,7 +133,6 @@ fun GameScreen() {
                     ballY = screenHeight - ballRadius
                     ballVy *= -1
                 }
-
                 // 2. Player Collision (Red Disk)
                 val playerY = screenHeight - 180f
                 val playerXLimitado = playerX.coerceIn(100f, screenWidth - 100f)
