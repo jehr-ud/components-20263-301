@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.udistrital.hockeygame.R
@@ -33,7 +34,7 @@ fun HomeScreen(
     val background = Brush.verticalGradient(
         colors = listOf(
             Color(0xFF0F172A),
-            Color(0xFF1E3A8A),
+            Color(0xFFFF9800),
             Color(0xFF2563EB)
         )
     )
@@ -136,4 +137,10 @@ fun HomeScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview(){
+    HomeScreen {  }
 }
