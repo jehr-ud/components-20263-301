@@ -1,4 +1,4 @@
-package com.udistrital.hockeygame.composables
+package com.udistrital.hockeygame.views.screens
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent

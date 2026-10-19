@@ -1,4 +1,4 @@
-package com.udistrital.hockeygame
+package com.udistrital.hockeygame.views
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,12 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.udistrital.hockeygame.composables.GameScreen
-import com.udistrital.hockeygame.composables.HomeScreen
+import com.udistrital.hockeygame.views.screens.GameScreen
+import com.udistrital.hockeygame.views.screens.HomeScreen
 import com.udistrital.hockeygame.enums.TypeScreen
-import com.udistrital.hockeygame.ui.theme.HockeyGameTheme
+import com.udistrital.hockeygame.views.theme.HockeyGameTheme
 
-class MainActivity : ComponentActivity() {
+class GameActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
