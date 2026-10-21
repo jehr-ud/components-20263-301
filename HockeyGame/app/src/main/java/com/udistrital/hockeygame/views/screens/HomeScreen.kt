@@ -1,10 +1,9 @@
-package com.udistrital.hockeygame.composables
+package com.udistrital.hockeygame.views.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SportsHockey
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -21,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.udistrital.hockeygame.R
@@ -33,7 +33,7 @@ fun HomeScreen(
     val background = Brush.verticalGradient(
         colors = listOf(
             Color(0xFF0F172A),
-            Color(0xFF1E3A8A),
+            Color(0xFFFF9800),
             Color(0xFF2563EB)
         )
     )
@@ -136,4 +136,10 @@ fun HomeScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview(){
+    HomeScreen {  }
 }

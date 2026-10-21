@@ -1,4 +1,4 @@
-package com.udistrital.hockeygame.ui.theme
+package com.udistrital.hockeygame.views.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

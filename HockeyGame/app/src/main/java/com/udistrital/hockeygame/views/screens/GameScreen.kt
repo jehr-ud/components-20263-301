@@ -1,4 +1,4 @@
-package com.udistrital.hockeygame.composables
+package com.udistrital.hockeygame.views.screens
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.udistrital.hockeygame.R
@@ -369,4 +370,10 @@ fun GameScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun GameScreenPreview(){
+    GameScreen {  }
 }
