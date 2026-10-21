@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import com.udistrital.hockeygame.views.screens.GameScreen
 import com.udistrital.hockeygame.views.screens.HomeScreen
 import com.udistrital.hockeygame.enums.TypeScreen
+import com.udistrital.hockeygame.utils.CodeGenerator
+import com.udistrital.hockeygame.views.screens.LobbyScreen
+import com.udistrital.hockeygame.views.screens.RoomSelectionScreen
 import com.udistrital.hockeygame.views.theme.HockeyGameTheme
 
 class GameActivity : ComponentActivity() {
@@ -24,14 +27,50 @@ class GameActivity : ComponentActivity() {
             HockeyGameTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     var currentScreen by remember { mutableStateOf(TypeScreen.HOME) }
+                    var currentRoomCode by remember { mutableStateOf("") }
 
-                    if (currentScreen == TypeScreen.HOME) {
-                        HomeScreen() {
-                            currentScreen = TypeScreen.GAME
+                    when (currentScreen) {
+                        TypeScreen.HOME -> {
+                            HomeScreen(
+                                onClickGame =  {
+                                    currentScreen = TypeScreen.GAME
+                                },
+                                onClickMultiplayer = {
+                                    currentScreen = TypeScreen.ROOM_SELECTION
+                                }
+                            )
                         }
-                    } else if (currentScreen == TypeScreen.GAME) {
-                        GameScreen() {
-                            currentScreen = TypeScreen.HOME
+
+                        TypeScreen.ROOM_SELECTION -> {
+                            RoomSelectionScreen(
+                                onCreateRoomClick = {
+                                    currentRoomCode = CodeGenerator.generateRoomCode()
+                                    currentScreen = TypeScreen.LOBBY
+                                },
+                                onJoinRoomClick = { roomCode ->
+                                    currentRoomCode = roomCode
+                                    currentScreen = TypeScreen.LOBBY
+                                }
+
+                            )
+                        }
+
+                        TypeScreen.LOBBY -> {
+                            LobbyScreen(
+                                roomCode = currentRoomCode,
+                                onCancelClick = {
+                                    currentScreen = TypeScreen.ROOM_SELECTION
+                                },
+                                onStartGameClick = {
+                                    currentScreen = TypeScreen.GAME
+                                }
+                            )
+                        }
+
+                        TypeScreen.GAME -> {
+                            GameScreen {
+                                currentScreen = TypeScreen.HOME
+                            }
                         }
                     }
                 }
