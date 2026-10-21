@@ -5,27 +5,32 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
-
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.udistrital.hockeygame.R
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.delay
-import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun GameScreen() {
+fun GameScreen(
+    onBack: () -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -36,17 +41,6 @@ fun GameScreen() {
     var accelX by remember { mutableFloatStateOf(0f) }
     var accelY by remember { mutableFloatStateOf(0f) }
     var accelZ by remember { mutableFloatStateOf(0f) }
-
-    // Ball state
-    var ballX by remember { mutableFloatStateOf(500f) }
-    var ballY by remember { mutableFloatStateOf(500f) }
-    var ballVx by remember { mutableFloatStateOf(15f) }
-    var ballVy by remember { mutableFloatStateOf(15f) }
-    val ballRadius = 40f
-
-    // Screen dimensions
-    var screenWidth by remember { mutableFloatStateOf(0f) }
-    var screenHeight by remember { mutableFloatStateOf(0f) }
 
     val sensorManager = remember {
         context.getSystemService(SensorManager::class.java)
@@ -78,19 +72,22 @@ fun GameScreen() {
                 sensor: Sensor?,
                 accuracy: Int
             ) {
-                // TODO: check this
             }
         }
 
         sensorManager.registerListener(
             listener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+            sensorManager.getDefaultSensor(
+                Sensor.TYPE_GYROSCOPE
+            ),
             SensorManager.SENSOR_DELAY_GAME
         )
 
         sensorManager.registerListener(
             listener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            sensorManager.getDefaultSensor(
+                Sensor.TYPE_ACCELEROMETER
+            ),
             SensorManager.SENSOR_DELAY_GAME
         )
 
@@ -98,78 +95,157 @@ fun GameScreen() {
             sensorManager.unregisterListener(listener)
         }
     }
-
-    var playerX by remember { mutableFloatStateOf(0f) }
+    var playerX by remember {
+        mutableFloatStateOf(0f)
+    }
 
     LaunchedEffect(accelX) {
         playerX += -accelX * 5f
     }
 
-    // Constants for positions
-    val playerRadius = 80f
-    val enemyRadius = 80f
+    var ballX by remember {
+        mutableFloatStateOf(0f)
+    }
 
-    // Game loop for ball physics
-    LaunchedEffect(screenWidth, screenHeight) {
-        if (screenWidth > 0 && screenHeight > 0) {
-            while (true) {
-                // Move ball
-                ballX += ballVx
-                ballY += ballVy
+    var ballY by remember {
+        mutableFloatStateOf(0f)
+    }
 
-                // 1. Boundary Collisions
-                if (ballX <= ballRadius) {
+    var ballVelocityX by remember {
+        mutableFloatStateOf(0f)
+    }
+
+    var ballVelocityY by remember {
+        mutableFloatStateOf(0f)
+    }
+
+    var canvasWidth by remember {
+        mutableFloatStateOf(0f)
+    }
+
+    var canvasHeight by remember {
+        mutableFloatStateOf(0f)
+    }
+
+    var ballInitialized by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(Unit) {
+        while (isActive) {
+            if (canvasWidth > 0f && canvasHeight > 0f) {
+                if (!ballInitialized) {
+
+                    ballX = canvasWidth / 2f
+                    ballY = canvasHeight / 2f
+
+                    ballVelocityX = 0f
+                    ballVelocityY = 7f
+
+                    ballInitialized = true
+                }
+
+                ballX += ballVelocityX
+                ballY += ballVelocityY
+
+                val ballRadius = 60f
+                val playerRadius = 80f
+
+                val playerY = canvasHeight - 180f
+
+                val playerXLimitado = playerX.coerceIn(
+                    100f,
+                    canvasWidth - 100f
+                )
+
+                if (ballX - ballRadius <= 0f) {
                     ballX = ballRadius
-                    ballVx *= -1
-                } else if (ballX >= screenWidth - ballRadius) {
-                    ballX = screenWidth - ballRadius
-                    ballVx *= -1
+                    ballVelocityX = -ballVelocityX
                 }
 
-                if (ballY <= ballRadius) {
-                    ballY = ballRadius
-                    ballVy *= -1
-                } else if (ballY >= screenHeight - ballRadius) {
-                    ballY = screenHeight - ballRadius
-                    ballVy *= -1
-                }
-                // 2. Player Collision (Red Disk)
-                val playerY = screenHeight - 180f
-                val playerXLimitado = playerX.coerceIn(100f, screenWidth - 100f)
-
-                val distToPlayer = sqrt((ballX - playerXLimitado).pow(2) + (ballY - playerY).pow(2))
-                if (distToPlayer <= (ballRadius + playerRadius)) {
-                    // Simple collision response: reverse Y and push out
-                    ballVy = -abs(ballVy)
-                    ballY = playerY - playerRadius - ballRadius
+                if (ballX + ballRadius >= canvasWidth) {
+                    ballX = canvasWidth - ballRadius
+                    ballVelocityX = -ballVelocityX
                 }
 
-                // 3. Enemy Collision (Green Disk)
+                if (ballY - ballRadius <= 0f) {
+                    onBack()
+                }
+
+                val distanciaJugador = sqrt(
+                    (ballX - playerXLimitado) *
+                            (ballX - playerXLimitado) +
+                            (ballY - playerY) *
+                            (ballY - playerY)
+                )
+
+                if (distanciaJugador <= ballRadius + playerRadius && ballVelocityY > 0f) {
+                    ballY =
+                        playerY -
+                                playerRadius -
+                                ballRadius
+                    ballVelocityY = -ballVelocityY
+
+                    val diferenciaX =
+                        ballX - playerXLimitado
+
+                    ballVelocityX =
+                        (diferenciaX * 0.08f)
+                            .coerceIn(-8f, 8f)
+                }
+
                 val enemyY = 180f
-                val enemyX = screenWidth / 2f
-                val distToEnemy = sqrt((ballX - enemyX).pow(2) + (ballY - enemyY).pow(2))
-                if (distToEnemy <= (ballRadius + enemyRadius)) {
-                    ballVy = abs(ballVy)
-                    ballY = enemyY + enemyRadius + ballRadius
+                val enemyX = canvasWidth / 2f
+
+                val distanciaEnemigo = sqrt(
+                    (ballX - enemyX) *
+                            (ballX - enemyX) +
+                            (ballY - enemyY) *
+                            (ballY - enemyY)
+                )
+
+                if (distanciaEnemigo <= ballRadius + playerRadius && ballVelocityY < 0f) {
+
+                    ballY = enemyY + playerRadius + ballRadius
+
+                    ballVelocityY = -ballVelocityY
+
+                    val diferenciaX =
+                        ballX - enemyX
+
+                    ballVelocityX =
+                        (diferenciaX * 0.08f)
+                            .coerceIn(-8f, 8f)
                 }
 
-                delay(16.milliseconds) // ~60 FPS
+                if (ballY + ballRadius >= canvasHeight) {
+                    onBack()
+                }
             }
+
+            delay(5L)
         }
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .onGloballyPositioned { coordinates ->
-                screenWidth = coordinates.size.width.toFloat()
-                screenHeight = coordinates.size.height.toFloat()
-            }
+        modifier = Modifier.fillMaxSize()
     ) {
 
         Canvas(
             modifier = Modifier.fillMaxSize()
         ) {
+
+            canvasWidth = size.width
+            canvasHeight = size.height
+
+            val centroX = size.width / 2f
+
+            val playerY = size.height - 180f
+
+            val playerXLimitado = playerX.coerceIn(
+                100f,
+                size.width - 100f
+            )
 
             drawRect(
                 color = Color(0xFF3498DB),
@@ -177,17 +253,9 @@ fun GameScreen() {
                 size = size
             )
 
-            val centroX = size.width / 2f
-            val playerY = size.height - 180f
-            val playerXLimitado = playerX.coerceIn(
-                100f,
-                size.width - 100f
-            )
-
-            // Draw Player
             drawCircle(
                 color = Color(0xFFE74C3C),
-                radius = playerRadius,
+                radius = 80f,
                 center = Offset(
                     playerXLimitado,
                     playerY
@@ -196,16 +264,7 @@ fun GameScreen() {
 
             drawCircle(
                 color = Color(0xFFC0392B),
-                radius = playerRadius,
-                center = Offset(
-                    playerXLimitado,
-                    playerY
-                ),
-                style = Stroke(width = 8f)
-            )
-            drawCircle(
-                color = Color(0xFFFFFFFF),
-                radius = 40f,
+                radius = 80f,
                 center = Offset(
                     playerXLimitado,
                     playerY
@@ -213,19 +272,29 @@ fun GameScreen() {
                 style = Stroke(width = 8f)
             )
 
-            // Draw Ball
             drawCircle(
-                color = Color.Yellow,
-                radius = ballRadius,
-                center = Offset(ballX, ballY)
+                color = Color.Black,
+                radius = 60f,
+                center = Offset(
+                    ballX,
+                    ballY
+                )
             )
 
-            // Draw Enemy
+            drawCircle(
+                color = Color(0xFF212121),
+                radius = 48f,
+                center = Offset(
+                    ballX,
+                    ballY
+                )
+            )
+
             val enemyY = 180f
 
             drawCircle(
                 color = Color(0xFF2ECC71),
-                radius = enemyRadius,
+                radius = 80f,
                 center = Offset(
                     centroX,
                     enemyY
@@ -234,7 +303,7 @@ fun GameScreen() {
 
             drawCircle(
                 color = Color(0xFF27AE60),
-                radius = enemyRadius,
+                radius = 80f,
                 center = Offset(
                     centroX,
                     enemyY
@@ -242,7 +311,6 @@ fun GameScreen() {
                 style = Stroke(width = 8f)
             )
         }
-
 
         Text(
             text = """
@@ -265,9 +333,40 @@ fun GameScreen() {
                 accelY,
                 accelZ
             ),
-            modifier = Modifier.align(Alignment.TopStart),
+            modifier = Modifier.align(
+                Alignment.TopStart
+            ),
             color = Color.White,
             fontSize = 16.sp
         )
+
+        Button(
+            onClick = {
+                onBack()
+            },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+                .width(120.dp)
+                .height(48.dp)
+                .shadow(
+                    10.dp,
+                    RoundedCornerShape(18.dp)
+                ),
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF00AEFF)
+            )
+        ) {
+
+            Text(
+                text = stringResource(
+                    R.string.home_btn_back
+                ),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
+        }
     }
 }
