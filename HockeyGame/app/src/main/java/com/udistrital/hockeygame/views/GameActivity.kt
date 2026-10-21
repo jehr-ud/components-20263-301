@@ -28,7 +28,6 @@ class GameActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     var currentScreen by remember { mutableStateOf(TypeScreen.HOME) }
                     var currentRoomCode by remember { mutableStateOf("") }
-
                     when (currentScreen) {
                         TypeScreen.HOME -> {
                             HomeScreen(
