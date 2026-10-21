@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LoginScreen(
-    onLoginClick: (String, String) -> Unit = { _, _ -> },
+    onLoginClick: (email: String, password: String) -> Unit,
     onRegisterClick: () -> Unit = {}
 ) {
     var email by remember { mutableStateOf("") }
