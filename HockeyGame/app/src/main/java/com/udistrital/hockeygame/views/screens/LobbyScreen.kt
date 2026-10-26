@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LobbyScreen(
-    roomCode: String = "HK89A2",
+    roomCode: String? = "HK89A2",
     hostName: String = "Jugador 1",
     guestName: String? = null,
     onCancelClick: () -> Unit = {},
@@ -73,31 +73,37 @@ fun LobbyScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
-                        Text(
-                            text = "CÓDIGO DE SALA",
-                            color = Color.White.copy(alpha = 0.6f),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = roomCode,
-                            color = Color(0xFFFF9800),
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 2.sp
-                        )
+                    if (roomCode != null){
+                        Column {
+                            Text(
+                                text = "CÓDIGO DE SALA",
+                                color = Color.White.copy(alpha = 0.6f),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Text(
+                                text = roomCode,
+                                color = Color(0xFFFF9800),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 2.sp
+                            )
+
+
+                        }
+                        IconButton(
+                            onClick = { clipboardManager.setText(AnnotatedString(roomCode)) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ContentCopy,
+                                contentDescription = "Copiar Código",
+                                tint = Color.White
+                            )
+                        }
                     }
 
-                    IconButton(
-                        onClick = { clipboardManager.setText(AnnotatedString(roomCode)) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ContentCopy,
-                            contentDescription = "Copiar Código",
-                            tint = Color.White
-                        )
-                    }
+
                 }
             }
 

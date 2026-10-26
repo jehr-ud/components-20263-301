@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import com.udistrital.hockeygame.views.screens.GameScreen
 import com.udistrital.hockeygame.views.screens.HomeScreen
 import com.udistrital.hockeygame.data.enums.TypeScreen
-import com.udistrital.hockeygame.utils.CodeGenerator
 import com.udistrital.hockeygame.viewmodels.RoomViewModel
 import com.udistrital.hockeygame.views.screens.LobbyScreen
 import com.udistrital.hockeygame.views.screens.RoomSelectionScreen
@@ -34,7 +33,7 @@ class GameActivity : ComponentActivity() {
                     var currentScreen by remember { mutableStateOf(TypeScreen.HOME) }
 
                     val roomViewModel: RoomViewModel by viewModels()
-                    val currentRoomCode by roomViewModel.code.collectAsState()
+                    val model by roomViewModel.model.collectAsState()
 
                     Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         when (currentScreen) {
@@ -64,7 +63,7 @@ class GameActivity : ComponentActivity() {
 
                             TypeScreen.LOBBY -> {
                                 LobbyScreen(
-                                    roomCode = currentRoomCode,
+                                    roomCode = model.id,
                                     onCancelClick = {
                                         currentScreen = TypeScreen.ROOM_SELECTION
                                     },
