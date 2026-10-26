@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.udistrital.hockeygame.views.screens.GameScreen
 import com.udistrital.hockeygame.views.screens.HomeScreen
-import com.udistrital.hockeygame.enums.TypeScreen
+import com.udistrital.hockeygame.data.enums.TypeScreen
 import com.udistrital.hockeygame.utils.CodeGenerator
+import com.udistrital.hockeygame.viewmodels.RoomViewModel
 import com.udistrital.hockeygame.views.screens.LobbyScreen
 import com.udistrital.hockeygame.views.screens.RoomSelectionScreen
 import com.udistrital.hockeygame.views.theme.HockeyGameTheme
@@ -29,7 +32,10 @@ class GameActivity : ComponentActivity() {
             HockeyGameTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     var currentScreen by remember { mutableStateOf(TypeScreen.HOME) }
-                    var currentRoomCode by remember { mutableStateOf("") }
+
+                    val roomViewModel: RoomViewModel by viewModels()
+                    val currentRoomCode by roomViewModel.code.collectAsState()
+
                     Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
                         when (currentScreen) {
                             TypeScreen.HOME -> {
@@ -46,11 +52,10 @@ class GameActivity : ComponentActivity() {
                             TypeScreen.ROOM_SELECTION -> {
                                 RoomSelectionScreen(
                                     onCreateRoomClick = {
-                                        currentRoomCode = CodeGenerator.generateRoomCode()
+                                        roomViewModel.createRoom()
                                         currentScreen = TypeScreen.LOBBY
                                     },
                                     onJoinRoomClick = { roomCode ->
-                                        currentRoomCode = roomCode
                                         currentScreen = TypeScreen.LOBBY
                                     }
 

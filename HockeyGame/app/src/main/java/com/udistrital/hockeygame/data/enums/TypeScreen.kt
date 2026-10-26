@@ -1,4 +1,4 @@
-package com.udistrital.hockeygame.enums
+package com.udistrital.hockeygame.data.enums
 
 enum class TypeScreen {
     HOME,
