@@ -23,10 +23,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun RoomSelectionScreen(
     onCreateRoomClick: () -> Unit = {},
-    onJoinRoomClick: (String) -> Unit = {}
+    onJoinOpenRoomClick: () -> Unit = {}
 ) {
-    var roomCode by remember { mutableStateOf("") }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +54,7 @@ fun RoomSelectionScreen(
             )
 
             Text(
-                text = "Crea una partida o únete con un código",
+                text = "Crea una partida o únete a la última sala disponible",
                 color = Color.White.copy(alpha = 0.8f),
                 fontSize = 15.sp
             )
@@ -113,7 +111,7 @@ fun RoomSelectionScreen(
                             color = Color.White.copy(alpha = 0.2f)
                         )
                         Text(
-                            text = "O ÚNETE A UNA",
+                            text = "O ÚNETE A SALA DISPONIBLE",
                             color = Color.White.copy(alpha = 0.6f),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
@@ -127,46 +125,19 @@ fun RoomSelectionScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    OutlinedTextField(
-                        value = roomCode,
-                        onValueChange = { if (it.length <= 6) roomCode = it.uppercase() },
-                        label = { Text("Código de sala", color = Color.White.copy(alpha = 0.8f)) },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Key,
-                                contentDescription = null,
-                                tint = Color.White.copy(alpha = 0.8f)
-                            )
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color(0xFF00AEFF),
-                            unfocusedBorderColor = Color.White.copy(alpha = 0.4f),
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White
-                        ),
-                        shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Button(
-                        onClick = { onJoinRoomClick(roomCode) },
-                        enabled = roomCode.isNotBlank(),
+                        onClick = onJoinOpenRoomClick,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(54.dp)
                             .shadow(8.dp, RoundedCornerShape(16.dp)),
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF00AEFF),
-                            disabledContainerColor = Color(0xFF00AEFF).copy(alpha = 0.3f)
+                            containerColor = Color(0xFF00AEFF)
                         )
                     ) {
                         Text(
-                            text = "UNIRSE A SALA",
+                            text = "BUSCAR Y UNIRSE",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White

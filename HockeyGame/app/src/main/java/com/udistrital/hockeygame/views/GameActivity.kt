@@ -39,7 +39,7 @@ class GameActivity : ComponentActivity() {
                         when (currentScreen) {
                             TypeScreen.HOME -> {
                                 HomeScreen(
-                                    onClickGame =  {
+                                    onClickGame = {
                                         currentScreen = TypeScreen.GAME
                                     },
                                     onClickMultiplayer = {
@@ -54,7 +54,8 @@ class GameActivity : ComponentActivity() {
                                         roomViewModel.createRoom()
                                         currentScreen = TypeScreen.LOBBY
                                     },
-                                    onJoinRoomClick = { roomCode ->
+                                    onJoinOpenRoomClick = {
+                                        roomViewModel.joinOpenRoom()
                                         currentScreen = TypeScreen.LOBBY
                                     }
 
@@ -63,7 +64,9 @@ class GameActivity : ComponentActivity() {
 
                             TypeScreen.LOBBY -> {
                                 LobbyScreen(
-                                    roomCode = model.id,
+                                    roomCode = model?.id,
+                                    hostName = model?.player1?.email ?: "",
+                                    guestName = model?.player2?.email,
                                     onCancelClick = {
                                         currentScreen = TypeScreen.ROOM_SELECTION
                                     },
